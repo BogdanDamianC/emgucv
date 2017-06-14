@@ -28,30 +28,31 @@ namespace Emgu.CV
          ConvertFromCGImage(cgImage);
       }
 
-      /// <summary>
-      /// Copy the data from the CGImage to the current Image object
-      /// </summary>
-      private void ConvertFromCGImage(CGImage cgImage)
-      {
-         //Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
-         if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(byte))
-         {
-            RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
-            using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
-            using (CGBitmapContext context = new CGBitmapContext(
-             MIplImage.ImageData,
-             Width, Height,
-             8,
-             Width * 4,
-             cspace,
-             CGImageAlphaInfo.PremultipliedLast))
-               context.DrawImage(rect, cgImage);
-         } else
-         {
-            using (Image<Rgba, Byte> tmp = new Image<Rgba, Byte>(cgImage))
-               ConvertFrom(tmp);
-         }
-      }
+		/// <summary>
+		/// Copy the data from the CGImage to the current Image object
+		/// </summary>
+		private void ConvertFromCGImage(CGImage cgImage)
+		{
+			//Don't do this, Xamarin.iOS won't be able to resolve: if (this is Image<Rgba, Byte>)
+			if (typeof(TColor) == typeof(Rgba) && typeof(TDepth) == typeof(byte))
+			{
+				var rect = new CGRect(0, 0, cgImage.Width, cgImage.Height);
+				using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
+				using (CGBitmapContext context = new CGBitmapContext(
+				 MIplImage.ImageData,
+				 Width, Height,
+				 8,
+				 Width * 4,
+				 cspace,
+				 CGImageAlphaInfo.PremultipliedLast))
+					context.DrawImage(rect, cgImage);
+			}
+			else
+			{
+				using (Image<Rgba, Byte> tmp = new Image<Rgba, Byte>(cgImage))
+					ConvertFrom(tmp);
+			}
+		}
 
       /// <summary>
       /// Convert this Image object to CGImage

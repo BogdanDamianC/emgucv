@@ -34,7 +34,7 @@ namespace Emgu.CV
 			Size sz = new Size((int)cgImage.Width, (int)cgImage.Height);
 			using (Mat m = new Mat(sz, DepthType.Cv8U, 4))
 			{
-				RectangleF rect = new RectangleF(PointF.Empty, new SizeF(cgImage.Width, cgImage.Height));
+				var rect = new CGRect(0, 0, cgImage.Width, cgImage.Height);
 				using (CGColorSpace cspace = CGColorSpace.CreateDeviceRGB())
 				using (CGBitmapContext context = new CGBitmapContext(
 				 m.DataPointer,
